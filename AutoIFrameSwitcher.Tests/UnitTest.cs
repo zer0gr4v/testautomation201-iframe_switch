@@ -3,6 +3,7 @@ using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace AutoIFrameSwitcher.Tests
@@ -22,20 +23,26 @@ namespace AutoIFrameSwitcher.Tests
         {            
             _driver.Navigate().GoToUrl($@"{AppDomain.CurrentDomain.BaseDirectory}\Data\Html\index.html");
             _driver.Manage().Window.Maximize();
-            var element1 = _driver.GetWebElementFromIFrame(By.CssSelector("#Grid1"));
-            Assert.IsTrue(element1.GetAttribute("id").Equals("Grid1"));
-            var element2 = _driver.GetWebElementFromIFrame(By.CssSelector("#Grid2"));
-            Assert.IsTrue(element2.GetAttribute("id").Equals("Grid2"));
-            var element3 = _driver.GetWebElementFromIFrame(By.CssSelector("#Grid3"));
-            Assert.IsTrue(element3.GetAttribute("id").Equals("Grid3"));
-            var elements = _driver.GetWebElementsFromIFrame(By.CssSelector("button"));
-            Assert.IsTrue(elements.Count==2);          
+
+            var errorList = new List<string>();
+            //verify grids
+            for (int i = 1; i <= 5; i++)
+            {
+                if (!_driver.GetWebElementFromIFrame(By.CssSelector($"#Grid{i}")).GetAttribute("id").Equals($"Grid{i}"))
+                    errorList.Add($"Grid with id #Grid{i} was not found.");
+            }          
+            Assert.IsTrue(errorList.Count == 0, $"{string.Join("\n", errorList.ToArray())}");
+
+            //verify button
+            var btn1 = _driver.GetWebElementsFromIFrame(By.CssSelector("button.sosyal"));
+            Assert.IsTrue(btn1.Count==2);
+            var btn2 = _driver.GetWebElementsFromIFrame(By.CssSelector("button.noclass"));
+            Assert.IsTrue(btn2.Count == 2);
         }
-               
+
         [TearDown]
         public void Close()
         {
             _driver.Close();
-        }
-    }
+        }}
 }

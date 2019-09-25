@@ -35,20 +35,21 @@ namespace AutoIFrameSwitcher.Utilities.Extensions
 
             foreach (var x in iFrameList)
             {
-                @this.SwitchTo().Frame(x.Index);
+                @this.SwitchTo().Frame(x.Index);             
                 var searchedElement = @this.FindElements(locatorStrategy).ToList();
-                if (searchedElement.Any())
-                    return searchedElement;
+                if (searchedElement.Any())                
+                    return searchedElement;                
                 @this.SwitchTo().ParentFrame();
             }
+
             //Element not found.. Check children
             foreach (var x in iFrameList)
             {               
                 if (x.HasChildren)
                 {
-                    @this.SwitchTo().Frame(x.Index);                   
+                    @this.SwitchTo().Frame(x.Index);                    
                     var searchedElement = @this.GetElementInIFrames(locatorStrategy, parentIndex + 1);
-                    if (searchedElement.Any())
+                    if (searchedElement.Any())                    
                         return searchedElement;
                     @this.SwitchTo().ParentFrame();
                 }
@@ -67,32 +68,8 @@ namespace AutoIFrameSwitcher.Utilities.Extensions
                 Name = (x.GetAttribute("name")) ?? x.GetAttribute("src"),
                 Index = index,
                 Parent = parentIndex,
-                HasChildren = frames.Any()                                
+                HasChildren = frames.Any()              
             }).ToList();
-        }
-
-        public static IWebElement GetIFrameElement(this IWebDriver @this, By locatorStrategy)
-        {
-            @this.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1);
-            var elements = @this.FindElements(locatorStrategy);
-            if (elements.Any()) return elements.ElementAt(0);
-            var parentIndex = 0;
-            var iFrameQueue = new Queue<IFrameElement>(@this.GetFrameElements(parentIndex));
-
-            while (iFrameQueue.Any())
-            {
-                var iFrame = iFrameQueue.Peek();
-                @this.SwitchTo().Frame(iFrame.Index);
-                var elementList = @this.FindElements(locatorStrategy).ToList();
-                if (elementList.Any()) return elementList.ElementAt(0);
-                //search for children
-                var childIframes = @this.GetFrameElements(parentIndex++);
-                var hasChildren = childIframes.Any();
-                //go to top
-               
-            }
-
-            throw new Exception($"No element found in iframe using {locatorStrategy}.");
         }
     }  
 }

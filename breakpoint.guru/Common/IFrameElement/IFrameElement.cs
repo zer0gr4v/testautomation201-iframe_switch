@@ -9,9 +9,7 @@ namespace AutoIFrameSwitcher.Common
         public string Name { get; set; }
         public string ElementId { get; set; }
         public int Index { get; set; }
-        public int? Parent { get; set; }
-        //public string Level { get; set;}
-        public bool HasChildren { get; set; }
-        public List<IWebElement> SearchedElement { get; set; }       
+        public int? Parent { get; set; }        
+        public bool HasChildren { get; set; }            
     }
 }
