@@ -28,7 +28,7 @@ namespace AutoIFrameSwitcher.Utilities.Extensions
                                : throw new Exception($"No elements found in iframe using {locatorStrategy}.");
         }
         
-        public static List<IWebElement> GetElementInIFrames(this IWebDriver @this, By locatorStrategy, int parentIndex = 0)
+        private static List<IWebElement> GetElementInIFrames(this IWebDriver @this, By locatorStrategy, int parentIndex = 0)
         {
             if(parentIndex==0)@this.SwitchTo().DefaultContent();  
             var iFrameList = @this.GetFrameElements(parentIndex);
@@ -55,8 +55,7 @@ namespace AutoIFrameSwitcher.Utilities.Extensions
                 }
             }
             return new List<IWebElement>();            
-        }
-      
+        }      
 
         private static List<IFrameElement> GetFrameElements(this IWebDriver @this, int parentIndex)
         {
