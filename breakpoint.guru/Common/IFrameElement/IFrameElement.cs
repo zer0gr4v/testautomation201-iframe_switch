@@ -10,6 +10,7 @@ namespace AutoIFrameSwitcher.Common
         public string ElementId { get; set; }
         public int Index { get; set; }
         public int? Parent { get; set; }        
-        public bool HasChildren { get; set; }            
+        public bool HasChildren { get; set; }      
+        public bool IsDisplayed { get; set; }
     }
 }
